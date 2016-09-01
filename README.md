@@ -29,7 +29,7 @@ cd AlphaBrock/Freely-surfing-the-Internet &&　bash SSR
 ### 卸载
 
 ```
-cd AlphaBrock/Freely-surfing-the-Internet &&　bash SSR uninstall
+cd Freely-surfing-the-Internet &&　bash SSR uninstall
 ```
 ### 使用
 
