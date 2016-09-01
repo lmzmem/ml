@@ -41,4 +41,4 @@ cd AlphaBrock/Freely-surfing-the-Internet &&　bash SSR uninstall
 
 > wap.gd10086.cn #移动
 
--更多host请看：各地区host，不保证一定有效
+-更多host请看：[各地区host](https://www.alphabrock.xyz/help/host.html)，不保证一定有效
