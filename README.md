@@ -24,7 +24,7 @@
 git clone https://github.com/AlphaBrock/Freely-surfing-the-Internet.git
 ```
 ```
-cd AlphaBrock/Freely-surfing-the-Internet &&　bash SSR
+cd Freely-surfing-the-Internet &&　bash SSR
 ```
 ### 卸载
 
