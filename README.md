@@ -35,7 +35,7 @@ cd AlphaBrock/Freely-surfing-the-Internet &&　bash SSR uninstall
 
 - 下载shadowsocksr安卓客户端：[shadowsocksr-android](https://soft.alphabrock.cn/shadowsocks/ssr-3.0.4.3.apk)
 
-- 混淆参数即host每个地区不同，在这我提供广东联通和联通的吧：
+- 混淆参数即host每个地区不同，在这我提供广东联通和移动的吧：
 
 > e.17wo.cn # 联通
 
