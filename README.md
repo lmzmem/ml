@@ -27,6 +27,9 @@ git clone https://github.com/AlphaBrock/Freely-surfing-the-Internet.git
 cd Freely-surfing-the-Internet &&　bash SSR
 ```
 ### 卸载
+```
+git clone https://github.com/AlphaBrock/Freely-surfing-the-Internet.git
+```
 
 ```
 cd Freely-surfing-the-Internet &&　bash SSR uninstall
