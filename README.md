@@ -15,7 +15,7 @@
 
 - 一台海外或者国内的机子，没有去用 [***AWS***](https://aws.amazon.com/cn/free/) 吧，免费一年。
 
-用AWS需要一张信用卡，没有就用 [全球付](https://www.globalcash.hk/)，注册一张，总比淘宝的安全。
+- 用AWS需要一张信用卡，没有就用 [全球付](https://www.globalcash.hk/)，注册一张，总比淘宝的安全。
 
 ### 安装使用
 
