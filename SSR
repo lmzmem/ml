@@ -1,6 +1,15 @@
 #! /bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
+#=================================================================#
+#   System Required:  CentOS 6,7, Debian, Ubuntu                  #
+#   Description: One click Install ShadowsocksR Server            #
+#   Author: 91yun <https://twitter.com/91yun>                     #
+#   Thanks: @breakwa11 <https://twitter.com/breakwa11>            #
+#   Thanks: @Teddysun <i@teddysun.com>                            #
+#   Intro:  https://shadowsocks.be/9.html                         #
+#=================================================================#
+
 clear
 echo
 
@@ -17,7 +26,7 @@ fi
 # Make sure only root can run our script
 function rootness(){
     if [[ $EUID -ne 0 ]]; then
-       echo "错误：请使用Root帐号进行安装" 1>&2
+       echo "Error:This script must be run as root!" 1>&2
        exit 1
     fi
 }
@@ -31,10 +40,11 @@ function checkos(){
     elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
         OS='Ubuntu'
     else
-        echo "非常抱歉，一键脚本并不支持当前所在的环境！"
+        echo "Not support OS, Please reinstall OS and retry!"
         exit 1
     fi
 }
+
 # Get version
 function getversion(){
     if [[ -s /etc/redhat-release ]];then
@@ -68,38 +78,38 @@ fi
 function pre_install(){
     # Not support CentOS 5
     if centosversion 5; then
-        echo "不支持CentOS 5，请更改操作系统CentOS 6 + / 7 + 12 + Debian / Ubuntu并重试。"
+        echo "Not support CentOS 5, please change OS to CentOS 6+/Debian 7+/Ubuntu 12+ and retry."
         exit 1
     fi
     # Set ShadowsocksR config password
-    echo -e "感谢使用一键SSR翻墙加速脚本【已支持国内一键安装】"
-    read -p "(回车将默认设置连接密码为：123456789):" shadowsockspwd
-    [ -z "$shadowsockspwd" ] && shadowsockspwd="123456789"
+    echo "Please input password for ShadowsocksR:"
+    read -p "(Default password: www.91yun.org):" shadowsockspwd
+    [ -z "$shadowsockspwd" ] && shadowsockspwd="www.91yun.org"
     echo
     echo "---------------------------"
-    echo "Ok，密码已设置为 = $shadowsockspwd"
+    echo "password = $shadowsockspwd"
     echo "---------------------------"
     echo
     # Set ShadowsocksR config port
     while true
     do
-    echo -e "设置远程连接端口 [1-65535]:"
-    read -p "(回车默认设置远程连接端口为: 138):" shadowsocksport
-    [ -z "$shadowsocksport" ] && shadowsocksport="138"
+    echo -e "Please input port for ShadowsocksR [1-65535]:"
+    read -p "(Default port: 8989):" shadowsocksport
+    [ -z "$shadowsocksport" ] && shadowsocksport="8989"
     expr $shadowsocksport + 0 &>/dev/null
     if [ $? -eq 0 ]; then
         if [ $shadowsocksport -ge 1 ] && [ $shadowsocksport -le 65535 ]; then
             echo
             echo "---------------------------"
-            echo "Ok，远程连接端口已设置为 = $shadowsocksport"
+            echo "port = $shadowsocksport"
             echo "---------------------------"
             echo
             break
         else
-            echo "错误：请正确设置端口为1-65535之间的数字"
+            echo "Input error! Please input correct number."
         fi
     else
-        echo "错误：请正确设置端口为1-65535之间的数字"
+        echo "Input error! Please input correct number."
     fi
     done
     get_char(){
@@ -112,7 +122,7 @@ function pre_install(){
         stty $SAVEDSTTY
     }
     echo
-    echo "安装前的准备已就绪，按下Ctrl+C或任意键开始安装！"
+    echo "Press any key to start...or Press Ctrl+C to cancel"
     char=`get_char`
     # Install necessary dependencies
     if [ "$OS" == 'CentOS' ]; then
@@ -124,27 +134,28 @@ function pre_install(){
     fi
     cd $cur_dir
 }
+
 # Download files
 function download_files(){
     # Download libsodium file
     if ! wget --no-check-certificate -O libsodium-1.0.10.tar.gz https://github.com/jedisct1/libsodium/releases/download/1.0.10/libsodium-1.0.10.tar.gz; then
-        echo "错误：抱歉，libsodium文件下载失败！"
+        echo "Failed to download libsodium file!"
         exit 1
     fi
     # Download ShadowsocksR file
     # if ! wget --no-check-certificate -O manyuser.zip https://github.com/breakwa11/shadowsocks/archive/manyuser.zip; then
-        # echo "错误：抱歉，shadowsocksr文件下载失败！"
+        # echo "Failed to download ShadowsocksR file!"
         # exit 1
     # fi
     # Download ShadowsocksR chkconfig file
     if [ "$OS" == 'CentOS' ]; then
-        if ! wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-debian -O /etc/init.d/shadowsocks; then
-            echo "错误：抱歉，shadowsocksr chkconfig文件下载失败！"
+        if ! wget --no-check-certificate https://raw.githubusercontent.com/91yun/shadowsocks_install/master/shadowsocksR -O /etc/init.d/shadowsocks; then
+            echo "Failed to download ShadowsocksR chkconfig file!"
             exit 1
         fi
     else
-        if ! wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocksR-debian -O /etc/init.d/shadowsocks; then
-            echo "错误：抱歉，ShadowsocksR-debian文件下载失败！"
+        if ! wget --no-check-certificate https://raw.githubusercontent.com/91yun/shadowsocks_install/master/shadowsocksR-debian -O /etc/init.d/shadowsocks; then
+            echo "Failed to download ShadowsocksR chkconfig file!"
             exit 1
         fi
     fi
@@ -152,7 +163,7 @@ function download_files(){
 
 # firewall set
 function firewall_set(){
-    echo "请稍候......正在设置防火墙"
+    echo "firewall set start..."
     if centosversion 6; then
         /etc/init.d/iptables status > /dev/null 2>&1
         if [ $? -eq 0 ]; then
@@ -163,10 +174,10 @@ function firewall_set(){
                 /etc/init.d/iptables save
                 /etc/init.d/iptables restart
             else
-                echo "端口 ${shadowsocksport} 已创建成功"
+                echo "port ${shadowsocksport} has been set up."
             fi
         else
-            echo "警告：防火墙似乎没有安装请手动安装防火墙"
+            echo "WARNING: iptables looks like shutdown or not installed, please manually set it if necessary."
         fi
     elif centosversion 7; then
         systemctl status firewalld > /dev/null 2>&1
@@ -175,14 +186,14 @@ function firewall_set(){
             firewall-cmd --permanent --zone=public --add-port=${shadowsocksport}/udp
             firewall-cmd --reload
         else
-            echo "防火墙好像没有启动，正在尝试启动！"
+            echo "Firewalld looks like not running, try to start..."
             systemctl start firewalld
             if [ $? -eq 0 ];then
                 firewall-cmd --permanent --zone=public --add-port=${shadowsocksport}/tcp
                 firewall-cmd --permanent --zone=public --add-port=${shadowsocksport}/udp
                 firewall-cmd --reload
             else
-                echo "警告：防火墙启动失败，请手动启用端口${shadowsocksport}"
+                echo "WARNING: Try to start firewalld failed. please enable port ${shadowsocksport} manually if necessary."
             fi
         fi
     fi
@@ -197,7 +208,7 @@ function config_shadowsocks(){
     "server_ipv6": "::",
     "server_port": ${shadowsocksport},
     "local_address": "127.0.0.1",
-    "local_port": 443,
+    "local_port": 1081,
     "password": "${shadowsockspwd}",
     "timeout": 120,
     "udp_timeout": 60,
@@ -215,6 +226,7 @@ function config_shadowsocks(){
 }
 EOF
 }
+
 # Install ShadowsocksR
 function install_ss(){
     # Install libsodium
@@ -230,7 +242,7 @@ function install_ss(){
 	git clone -b manyuser https://github.com/breakwa11/shadowsocks.git /usr/local/shadowsocks
     if [ -f /usr/local/shadowsocks/server.py ]; then
         chmod +x /etc/init.d/shadowsocks
-           # Add run on system start up
+        # Add run on system start up
         if [ "$OS" == 'CentOS' ]; then
             chkconfig --add shadowsocks
             chkconfig shadowsocks on
@@ -241,24 +253,24 @@ function install_ss(){
         /etc/init.d/shadowsocks start
         clear
         echo
-        echo "恭喜你！我们已为你完成了所有的安装，以下是连接信息！"
-        echo -e "服务器IP地址: \033[41;37m ${IP} \033[0m"
-        echo -e "远程端口: \033[41;37m ${shadowsocksport} \033[0m"
-        echo -e "密码: \033[41;37m ${shadowsockspwd} \033[0m"
-        echo -e "本地IP地址: \033[41;37m 127.0.0.1 \033[0m"
-        echo -e "本地端口: \033[41;37m 1080 \033[0m"
-        echo -e "认证协议: \033[41;37m auth_sha1 \033[0m"
-        echo -e "混淆方式: \033[41;37m http_simple \033[0m"
-        echo -e "加密方法: \033[41;37m chacha20 \033[0m"
+        echo "Congratulations, ShadowsocksR install completed!"
+        echo -e "Server IP: \033[41;37m ${IP} \033[0m"
+        echo -e "Server Port: \033[41;37m ${shadowsocksport} \033[0m"
+        echo -e "Password: \033[41;37m ${shadowsockspwd} \033[0m"
+        echo -e "Local IP: \033[41;37m 127.0.0.1 \033[0m"
+        echo -e "Local Port: \033[41;37m 1080 \033[0m"
+        echo -e "Protocol: \033[41;37m auth_sha1 \033[0m"
+        echo -e "obfs: \033[41;37m http_simple \033[0m"
+        echo -e "Encryption Method: \033[41;37m chacha20 \033[0m"
         echo
-        echo "感谢使用"
-        echo "鸣谢：teddysun"
-        echo "本脚本仅供学习交流工作使用，请勿用于非法用途"
+        echo "Welcome to visit:https://shadowsocks.be/9.html"
+        echo "If you want to change protocol & obfs, reference URL:"
+        echo "https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup"
         echo
-        echo "任何法律责任由使用人自我承担"
+        echo "Enjoy it!"
         echo
     else
-        echo "ShadowsocksR 安装失败！"
+        echo "Shadowsocks install failed!"
         install_cleanup
         exit 1
     fi
@@ -278,16 +290,14 @@ function install_cleanup(){
     rm -rf shadowsocks-manyuser
     rm -f libsodium-1.0.10.tar.gz
     rm -rf libsodium-1.0.10
-    rm -f SSR
-
 }
 
 
 # Uninstall ShadowsocksR
 function uninstall_shadowsocks(){
-    printf "你真的要卸载ShadowsocksR？(Y/n) "
+    printf "Are you sure uninstall ShadowsocksR? (y/n) "
     printf "\n"
-    read -p "(回车将默认为: n):" answer
+    read -p "(Default: n):" answer
     if [ -z $answer ]; then
         answer="n"
     fi
@@ -305,9 +315,9 @@ function uninstall_shadowsocks(){
         rm -f /etc/shadowsocks.json
         rm -f /etc/init.d/shadowsocks
         rm -rf /usr/local/shadowsocks
-        echo "ShadowsocksR 已成功卸载！"
+        echo "ShadowsocksR uninstall success!"
     else
-        echo "卸载请求已取消！"
+        echo "uninstall cancelled, Nothing to do"
     fi
 }
 
@@ -340,7 +350,7 @@ uninstall)
     uninstall_shadowsocks
     ;;
 *)
-    echo "参数错误 [${action} ]"
+    echo "Arguments error! [${action} ]"
     echo "Usage: `basename $0` {install|uninstall}"
     ;;
 esac
