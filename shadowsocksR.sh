@@ -238,7 +238,7 @@ function install_ss(){
     cd $cur_dir
     # unzip -q manyuser.zip
     # mv shadowsocks-manyuser/shadowsocks /usr/local/
-	git clone -b manyuser https://github.com/AlphaBrock/shadowsocks.git /usr/local/shadowsocks
+	git clone https://github.com/AlphaBrock/shadowsocks.git /usr/local/shadowsocks
     if [ -f /usr/local/shadowsocks/server.py ]; then
         chmod +x /etc/init.d/shadowsocks
         # Add run on system start up
