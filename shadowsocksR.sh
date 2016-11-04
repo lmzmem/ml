@@ -4,6 +4,7 @@ export PATH
 #=================================================================#
 #   System Required:  CentOS 6,7, Debian, Ubuntu                  #
 #   Description: One click Install ShadowsocksR Server            #   
+#   My Blog: @AlphaBrock <https://alphabrock.cn>                   #
 #   Thanks: @breakwa11 <https://twitter.com/breakwa11>            #
 #   Thanks: @Teddysun <i@teddysun.com>                            #
 #   Intro:  https://shadowsocks.be/9.html                         #
@@ -238,7 +239,7 @@ function install_ss(){
     cd $cur_dir
     # unzip -q manyuser.zip
     # mv shadowsocks-manyuser/shadowsocks /usr/local/
-	git clone https://github.com/AlphaBrock/shadowsocks.git /usr/local/shadowsocks
+	https://github.com/AlphaBrock/ssr-ml.git /usr/local/shadowsocks
     if [ -f /usr/local/shadowsocks/server.py ]; then
         chmod +x /etc/init.d/shadowsocks
         # Add run on system start up
