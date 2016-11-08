@@ -243,6 +243,7 @@ function install_ss(){
 	git clone https://github.com/AlphaBrock/ssr-ml.git /usr/local/shadowsocks
     if [ -f /usr/local/shadowsocks/server.py ]; then
         chmod +x /etc/init.d/shadowsocks
+	chmod 755 /usr/local/shadowsocks/*
         # Add run on system start up
         if [ "$OS" == 'CentOS' ]; then
             chkconfig --add shadowsocks
